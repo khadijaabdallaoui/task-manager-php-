@@ -48,36 +48,40 @@ $tasks = $stmt->fetchAll();
 <head>
     <meta charset="UTF-8">
     <title>Mes Tâches</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h2>Bonjour, <?= htmlspecialchars($_SESSION['user_nom']) ?> 👋</h2>
-    <a href="logout.php">Déconnexion</a>
+    <div class="container">
+        <h2>Bonjour, <?= htmlspecialchars($_SESSION['user_nom']) ?> 👋</h2>
+        <a href="logout.php" class="logout">Déconnexion</a>
 
-    <h3>Ajouter une tâche</h3>
-    <form method="POST">
-        <input type="text" name="titre" placeholder="Titre" required><br><br>
-        <textarea name="description" placeholder="Description"></textarea><br><br>
-        <input type="date" name="date_limite"><br><br>
-        <button type="submit">Ajouter</button>
-    </form>
+        <h3>Ajouter une tâche</h3>
+        <form method="POST">
+            <input type="text" name="titre" placeholder="Titre" required>
+            <textarea name="description" placeholder="Description"></textarea>
+            <input type="date" name="date_limite">
+            <button type="submit">Ajouter</button>
+        </form>
 
-    <h3>Mes tâches</h3>
-    <?php if (count($tasks) === 0): ?>
-        <p>Aucune tâche pour le moment.</p>
-    <?php endif; ?>
+        <h3>Mes tâches</h3>
+        <?php if (count($tasks) === 0): ?>
+            <p>Aucune tâche pour le moment.</p>
+        <?php endif; ?>
 
-    <?php foreach ($tasks as $task): ?>
-        <div style="border:1px solid #ccc; padding:10px; margin-bottom:10px;">
-            <strong><?= htmlspecialchars($task['titre']) ?></strong>
-            (<?= $task['statut'] ?>)<br>
-            <?= htmlspecialchars($task['description']) ?><br>
-            <small>Date limite : <?= $task['date_limite'] ?></small><br>
+        <?php foreach ($tasks as $task): ?>
+            <div class="task">
+                <strong><?= htmlspecialchars($task['titre']) ?></strong>
+                (<?= $task['statut'] ?>)<br>
+                <?= htmlspecialchars($task['description']) ?><br>
+                <small>Date limite : <?= $task['date_limite'] ?></small><br>
 
-            <a href="?statut=a_faire&id=<?= $task['id'] ?>">À faire</a> |
-            <a href="?statut=en_cours&id=<?= $task['id'] ?>">En cours</a> |
-            <a href="?statut=termine&id=<?= $task['id'] ?>">Terminé</a> |
-            <a href="?delete=<?= $task['id'] ?>" onclick="return confirm('Supprimer cette tâche ?')">Supprimer</a>
-        </div>
-    <?php endforeach; ?>
+                <a href="?statut=a_faire&id=<?= $task['id'] ?>">À faire</a> |
+                <a href="?statut=en_cours&id=<?= $task['id'] ?>">En cours</a> |
+                <a href="?statut=termine&id=<?= $task['id'] ?>">Terminé</a> |
+                <a href="?delete=<?= $task['id'] ?>" onclick="return confirm('Supprimer cette tâche ?')">Supprimer</a>
+            </div>
+        <?php endforeach; ?>
+    </div>
 </body>
+</html>
 </html>

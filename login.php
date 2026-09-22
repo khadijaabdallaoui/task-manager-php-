@@ -26,24 +26,27 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 <head>
     <meta charset="UTF-8">
     <title>Connexion</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h2>Connexion</h2>
+    <div class="container">
+        <h2>Connexion</h2>
 
-    <?php if ($erreur): ?>
-        <p style="color:red;"><?= $erreur ?></p>
-    <?php endif; ?>
+        <?php if ($erreur): ?>
+            <p class="error"><?= $erreur ?></p>
+        <?php endif; ?>
 
-    <form method="POST">
-        <label>Email :</label><br>
-        <input type="email" name="email" required><br><br>
+        <form method="POST">
+            <label>Email :</label><br>
+            <input type="email" name="email" required><br>
 
-        <label>Mot de passe :</label><br>
-        <input type="password" name="password" required><br><br>
+            <label>Mot de passe :</label><br>
+            <input type="password" name="password" required><br>
 
-        <button type="submit">Se connecter</button>
-    </form>
+            <button type="submit">Se connecter</button>
+        </form>
 
-    <p>Pas encore de compte ? <a href="register.php">S'inscrire</a></p>
+        <p>Pas encore de compte ? <a href="register.php">S'inscrire</a></p>
+    </div>
 </body>
 </html>

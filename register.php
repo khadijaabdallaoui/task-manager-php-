@@ -29,25 +29,28 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 <head>
     <meta charset="UTF-8">
     <title>Inscription</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h2>Inscription</h2>
+    <div class="container">
+        <h2>Inscription</h2>
 
-    <?php if ($erreur): ?>
-        <p style="color:red;"><?= $erreur ?></p>
-    <?php endif; ?>
+        <?php if ($erreur): ?>
+            <p class="error"><?= $erreur ?></p>
+        <?php endif; ?>
 
-    <form method="POST">
-        <label>Nom :</label><br>
-        <input type="text" name="nom" required><br><br>
+        <form method="POST">
+            <label>Nom :</label><br>
+            <input type="text" name="nom" required><br>
 
-        <label>Email :</label><br>
-        <input type="email" name="email" required><br><br>
+            <label>Email :</label><br>
+            <input type="email" name="email" required><br>
 
-        <label>Mot de passe :</label><br>
-        <input type="password" name="password" required><br><br>
+            <label>Mot de passe :</label><br>
+            <input type="password" name="password" required><br>
 
-        <button type="submit">S'inscrire</button>
-    </form>
+            <button type="submit">S'inscrire</button>
+        </form>
+    </div>
 </body>
 </html>
