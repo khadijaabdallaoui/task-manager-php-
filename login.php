@@ -25,12 +25,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Connexion</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Connexion - Réservation de Salles</title>
+    <link rel="stylesheet" href="code.css">
 </head>
 <body>
     <div class="container">
         <h2>Connexion</h2>
+        <p>Accédez à votre espace de réservation</p>
 
         <?php if ($erreur): ?>
             <p class="error"><?= $erreur ?></p>

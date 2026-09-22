@@ -1,6 +1,6 @@
 <?php
 $host = "localhost";
-$dbname = "task_manager";
+$dbname = "reservation_salles";
 $username = "root";
 $password = "";
 

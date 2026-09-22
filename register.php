@@ -7,14 +7,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $email = $_POST['email'];
     $password = $_POST['password'];
 
-    // Vérifier si l'email existe déjà
     $stmt = $pdo->prepare("SELECT id FROM users WHERE email = ?");
     $stmt->execute([$email]);
 
     if ($stmt->rowCount() > 0) {
         $erreur = "Cet email est déjà utilisé.";
     } else {
-        // Hasher le mot de passe et l'enregistrer
         $hash = password_hash($password, PASSWORD_DEFAULT);
         $stmt = $pdo->prepare("INSERT INTO users (nom, email, mot_de_passe) VALUES (?, ?, ?)");
         $stmt->execute([$nom, $email, $hash]);
@@ -28,12 +26,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Inscription</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Inscription - Réservation de Salles</title>
+    <link rel="stylesheet" href="code.css">
 </head>
 <body>
     <div class="container">
         <h2>Inscription</h2>
+        <p>Créez votre compte pour réserver une salle de réunion</p>
 
         <?php if ($erreur): ?>
             <p class="error"><?= $erreur ?></p>
@@ -51,6 +50,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
             <button type="submit">S'inscrire</button>
         </form>
+
+        <p>Déjà un compte ? <a href="login.php">Se connecter</a></p>
     </div>
 </body>
 </html>
