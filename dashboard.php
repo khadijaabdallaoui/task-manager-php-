@@ -12,7 +12,14 @@ $user_id = $_SESSION['user_id'];
 $erreur = "";
 
 // Récupérer la liste des salles
+// Récupérer la liste des salles
 $salles = $pdo->query("SELECT * FROM salles")->fetchAll();
+
+// Compter le nombre de réunions par salle (statistiques)
+$stats = $pdo->query("SELECT salles.nom, COUNT(reunions.id) AS total 
+    FROM salles 
+    LEFT JOIN reunions ON salles.id = reunions.salle_id 
+    GROUP BY salles.id")->fetchAll();
 
 // Réserver une salle
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['salle_id'])) {
@@ -79,7 +86,15 @@ $reunions = $stmt->fetchAll();
         <h2>Bonjour, <?= htmlspecialchars($_SESSION['user_nom']) ?> 👋</h2>
         <a href="logout.php" class="logout">Déconnexion</a>
 
-        <h3>Réunions programmées</h3>
+       <div style="display:flex; gap:15px; margin-bottom:15px;">
+    <?php foreach ($stats as $s): ?>
+        <div style="background:#eef7ee; padding:10px 15px; border-radius:8px; font-size:14px;">
+            <strong><?= $s['nom'] ?></strong> : <?= $s['total'] ?> réunion(s)
+        </div>
+    <?php endforeach; ?>
+</div>
+
+<h3>Réunions programmées</h3>
 
 <form method="GET" style="margin-bottom: 15px;">
     <label>Filtrer par salle :</label>
