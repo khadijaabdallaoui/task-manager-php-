@@ -65,11 +65,11 @@ $sql = "SELECT reunions.*, salles.nom AS salle_nom, users.nom AS user_nom
 
 if ($filtre_salle !== '') {
     $sql .= " WHERE reunions.salle_id = ?";
-    $sql .= " ORDER BY date_reunion ASC, heure_debut ASC";
+$sql .= " ORDER BY id DESC";
     $stmt = $pdo->prepare($sql);
     $stmt->execute([$filtre_salle]);
 } else {
-    $sql .= " ORDER BY date_reunion ASC, heure_debut ASC";
+$sql .= " ORDER BY id DESC";
     $stmt = $pdo->query($sql);
 }
 $reunions = $stmt->fetchAll();
