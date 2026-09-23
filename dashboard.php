@@ -2,7 +2,7 @@
 session_start();
 require 'config.php';
 
-// Protection : si pas connecté, redirection vers login
+// Vérifie que l'utilisateur est connecté, sinon redirige vers la page de connexion
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
     exit();
@@ -22,6 +22,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['salle_id'])) {
     $heure_debut = $_POST['heure_debut'];
     $heure_fin = $_POST['heure_fin'];
 
+    // Vérifie s'il existe déjà une réunion dans la même salle avec un horaire qui se chevauche
     $stmt = $pdo->prepare("SELECT * FROM reunions 
         WHERE salle_id = ? AND date_reunion = ? 
         AND (heure_debut < ? AND heure_fin > ?)");
@@ -45,7 +46,7 @@ if (isset($_GET['delete'])) {
     exit();
 }
 
-// Récupérer toutes les réunions
+// Récupère toutes les réunions avec le nom de la salle et de l'utilisateur (jointure entre 3 tables)
 $stmt = $pdo->query("SELECT reunions.*, salles.nom AS salle_nom, users.nom AS user_nom 
     FROM reunions 
     JOIN salles ON reunions.salle_id = salles.id 
