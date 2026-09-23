@@ -84,7 +84,7 @@ $reunions = $stmt->fetchAll();
 <body>
     <div class="container">
         <h2>Bonjour, <?= htmlspecialchars($_SESSION['user_nom']) ?> 👋</h2>
-        <a href="logout.php" class="logout">Déconnexion</a>
+        <a href="profile.php">Mon Profil</a> | <a href="logout.php" class="logout">Déconnexion</a>
 
        <div style="display:flex; gap:15px; margin-bottom:15px;">
     <?php foreach ($stats as $s): ?>
