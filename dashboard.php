@@ -141,16 +141,21 @@ $reunions = $stmt->fetchAll();
         <?php endif; ?>
 
         <?php foreach ($reunions as $r): ?>
-            <div class="task">
-                <strong><?= htmlspecialchars($r['objet']) ?></strong><br>
-                📍 <?= $r['salle_nom'] ?> — 👤 <?= htmlspecialchars($r['user_nom']) ?><br>
-                📅 <?= $r['date_reunion'] ?> de <?= substr($r['heure_debut'],0,5) ?> à <?= substr($r['heure_fin'],0,5) ?>
+    <?php 
+    // Vérifie si la réunion est aujourd'hui
+    $est_aujourd_hui = ($r['date_reunion'] === date('Y-m-d'));
+    $style_special = $est_aujourd_hui ? 'style="background:#fff3cd; border-color:#ffc107;"' : '';
+    ?>
+    <div class="task" <?= $style_special ?>>
+        <strong><?= htmlspecialchars($r['objet']) ?></strong><br>
+        📍 <?= $r['salle_nom'] ?> — 👤 <?= htmlspecialchars($r['user_nom']) ?><br>
+        📅 <?= $r['date_reunion'] ?> de <?= substr($r['heure_debut'],0,5) ?> à <?= substr($r['heure_fin'],0,5) ?>
 
-                <?php if ($r['user_id'] == $user_id): ?>
-                    | <a href="?delete=<?= $r['id'] ?>" onclick="return confirm('Annuler cette réservation ?')">Annuler</a>
-                <?php endif; ?>
-            </div>
-        <?php endforeach; ?>
+        <?php if ($r['user_id'] == $user_id): ?>
+            | <a href="?delete=<?= $r['id'] ?>" onclick="return confirm('Annuler cette réservation ?')">Annuler</a>
+        <?php endif; ?>
+    </div>
+<?php endforeach; ?>
     </div>
 </body>
 </html>
