@@ -46,12 +46,25 @@ if (isset($_GET['delete'])) {
     exit();
 }
 
-// Récupère toutes les réunions avec le nom de la salle et de l'utilisateur (jointure entre 3 tables)
-$stmt = $pdo->query("SELECT reunions.*, salles.nom AS salle_nom, users.nom AS user_nom 
+// Filtre optionnel par salle (récupéré depuis l'URL, ex: ?filtre_salle=2)
+$filtre_salle = isset($_GET['filtre_salle']) ? $_GET['filtre_salle'] : '';
+
+// Récupère les réunions avec le nom de la salle et de l'utilisateur (jointure entre 3 tables)
+// Si un filtre est actif, on ajoute une condition WHERE
+$sql = "SELECT reunions.*, salles.nom AS salle_nom, users.nom AS user_nom 
     FROM reunions 
     JOIN salles ON reunions.salle_id = salles.id 
-    JOIN users ON reunions.user_id = users.id 
-    ORDER BY date_reunion ASC, heure_debut ASC");
+    JOIN users ON reunions.user_id = users.id";
+
+if ($filtre_salle !== '') {
+    $sql .= " WHERE reunions.salle_id = ?";
+    $sql .= " ORDER BY date_reunion ASC, heure_debut ASC";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([$filtre_salle]);
+} else {
+    $sql .= " ORDER BY date_reunion ASC, heure_debut ASC";
+    $stmt = $pdo->query($sql);
+}
 $reunions = $stmt->fetchAll();
 ?>
 <!DOCTYPE html>
@@ -66,19 +79,33 @@ $reunions = $stmt->fetchAll();
         <h2>Bonjour, <?= htmlspecialchars($_SESSION['user_nom']) ?> 👋</h2>
         <a href="logout.php" class="logout">Déconnexion</a>
 
-        <h3>Réserver une salle</h3>
+        <h3>Réunions programmées</h3>
+
+<form method="GET" style="margin-bottom: 15px;">
+    <label>Filtrer par salle :</label>
+    <select name="filtre_salle" onchange="this.form.submit()">
+        <option value="">Toutes les salles</option>
+        <?php foreach ($salles as $salle): ?>
+            <option value="<?= $salle['id'] ?>" <?= ((string)$filtre_salle === (string)$salle['id']) ? 'selected' : '' ?>>
+    <?= $salle['nom'] ?>
+</option>
+        <?php endforeach; ?>
+    </select>
+</form>
 
         <?php if ($erreur): ?>
             <p class="error"><?= $erreur ?></p>
         <?php endif; ?>
 
         <form method="POST">
-            <label>Salle :</label>
-            <select name="salle_id" required>
-                <?php foreach ($salles as $salle): ?>
-                    <option value="<?= $salle['id'] ?>"><?= $salle['nom'] ?> (<?= $salle['capacite'] ?> places)</option>
-                <?php endforeach; ?>
-            </select>
+    <label>Salle :</label>
+    <select name="salle_id" required>
+        <?php foreach ($salles as $salle): ?>
+            <option value="<?= $salle['id'] ?>" <?= ((string)$filtre_salle === (string)$salle['id']) ? 'selected' : '' ?>>
+    <?= $salle['nom'] ?> (<?= $salle['capacite'] ?> places)
+</option>
+        <?php endforeach; ?>
+    </select>
 
             <input type="text" name="objet" placeholder="Objet de la réunion" required>
             <input type="date" name="date_reunion" required>
